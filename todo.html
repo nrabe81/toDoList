@@ -1,0 +1,146 @@
+<html>
+
+    <head>
+        <title>
+            My Todo App
+        </title>
+    </head>
+
+    <body>
+
+        <input id="todo-title" type="text" /> 
+
+        <input id="date-picker" type="date" />
+        
+        <button onclick="addTodo()">
+            Add Todo
+        </button>
+
+        <div id="todo-list"></div>
+        
+        <script>
+            
+            //Start of Model Section "MVC"
+            //Creating an array of "Todo" objects
+
+            let todos = [{
+                title: 'Get Groceries',
+                dueDate: '2021-10-04',
+                id: 'id1'
+            }, {
+                title: 'Wash Car',
+                dueDate: '2023-02-10',
+                id: 'id2'
+            }, {
+                title: 'Make Dinner',
+                dueDate: '2023-02-13',
+                id: 'id3'
+
+            }];
+
+            render();
+
+            //Creates a todo
+            function createTodo(title, dueDate)
+            {
+                //creating a unique id
+                const id = new Date().getTime();
+
+                todos.push({
+                    title: title,
+                    dueDate: dueDate,
+                    id: id
+                });
+            }
+
+            //Deletes a todo
+            function removeTodo(idToDelete)
+            {
+                //filter will loop through the array and run a function
+                //If an element returns true, it remains in array but if it returns false, it is removed from the array
+                todos = todos.filter(function(todo)
+                {
+                    if(idToDelete == todo.id)
+                        return false;
+                    else
+                        return true;    
+
+                });
+
+            }
+
+            //End of Model Section "MVC"
+
+            //Start of View Section "MVC"
+
+            //adding new todo list to page----------------------------
+            function render()
+            {
+                //reset our list before adding it all again
+                document.getElementById('todo-list').innerHTML = '';
+
+                todos.forEach(function(todo)
+                {
+                    //create div to hold each "Todo"
+                    const element = document.createElement("div");
+                    element.innerText = todo.title + ' ' + todo.dueDate;
+
+                    //create a delete button for todo
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.style = 'margin-left: 12px;';
+                    deleteButton.onclick = deleteTodo;
+                    deleteButton.id = todo.id;
+                    element.appendChild(deleteButton);
+
+                    const todoList = document.getElementById('todo-list');
+                    todoList.appendChild(element);
+
+                });
+            }
+
+            //End of View Section "MVC"
+
+            //Start of Controller Section "MVC"
+
+
+            //adding a single todo item to the todo array when the add button is pressed ---------------------------
+            function addTodo()
+            {
+                //get value from text box
+                const title = document.getElementById('todo-title').value;
+
+                //get value from date picker
+                const dueDate = document.getElementById('date-picker').value;
+                
+                createTodo(title, dueDate);
+
+                render();
+            }
+
+
+            //the function for when a delete button is pressed----------------------
+            function deleteTodo(event)
+            {
+                const deleteButton = event.target;
+                const idToDelete = deleteButton.id;
+
+                removeTodo(idToDelete);
+
+                render();
+            }
+
+
+            //End of Controller Section "MVC"
+
+
+        </script>
+
+    </body>
+
+</html>
+
+
+
+
+
